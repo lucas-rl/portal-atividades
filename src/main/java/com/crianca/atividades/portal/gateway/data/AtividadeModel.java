@@ -9,14 +9,17 @@ public class AtividadeModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(nullable = false)
     private String nome;
 
+    @Lob
+    @Column(columnDefinition = "MEDIUMBLOB")
+    private byte[] pdf;
+
     @ManyToOne
-    @JoinColumn(name = "categoria", insertable = false, updatable = false)
+    @JoinColumn(name = "categoria", nullable = false)
     private CategoriaModel categoria;
 
-    @Column(name = "categoria")
-    private Integer categoriaId;
 
     public Integer getId() {
         return id;
@@ -34,20 +37,20 @@ public class AtividadeModel {
         this.nome = nome;
     }
 
+    public byte[] getPdf() {
+        return pdf;
+    }
+
+    public void setPdf(byte[] pdf) {
+        this.pdf = pdf;
+    }
+
     public CategoriaModel getCategoria() {
         return categoria;
     }
 
     public void setCategoria(CategoriaModel categoria) {
         this.categoria = categoria;
-    }
-
-    public Integer getCategoriaId() {
-        return categoriaId;
-    }
-
-    public void setCategoriaId(Integer categoriaId) {
-        this.categoriaId = categoriaId;
     }
 
 }

@@ -17,13 +17,15 @@ public class AtividadeUseCase {
     }
 
     public List<AtividadeModel> getAtividades(){
-        return atividadesRepository.findAll();
+        return atividadesRepository.getAll();
     }
 
     public void saveAtividade(AtividadeRequest request){
         AtividadeModel model = new AtividadeModel();
         model.setNome(request.getNome());
-        model.setCategoriaId(request.getCategoria());
+        CategoriaModel categoria = new CategoriaModel();
+        categoria.setId(request.getCategoria());
+        model.setCategoria(categoria);
 
         atividadesRepository.save(model);
     }
