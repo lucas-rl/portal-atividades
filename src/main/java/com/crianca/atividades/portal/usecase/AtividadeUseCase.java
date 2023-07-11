@@ -20,13 +20,13 @@ public class AtividadeUseCase {
         return atividadesRepository.getAll();
     }
 
-    public void saveAtividade(AtividadeRequest request){
+    public AtividadeModel saveAtividade(AtividadeRequest request){
         AtividadeModel model = new AtividadeModel();
         model.setNome(request.getNome());
         CategoriaModel categoria = new CategoriaModel();
         categoria.setId(request.getCategoria());
         model.setCategoria(categoria);
 
-        atividadesRepository.save(model);
+        return atividadesRepository.save(model);
     }
 }

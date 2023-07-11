@@ -3,10 +3,11 @@ package com.crianca.atividades.portal.controller;
 import com.crianca.atividades.portal.controller.data.AtividadePdfRequest;
 import com.crianca.atividades.portal.controller.data.AtividadeRequest;
 import com.crianca.atividades.portal.controller.data.AtividadeResponse;
-import com.crianca.atividades.portal.gateway.AtividadesRepository;
 import com.crianca.atividades.portal.gateway.data.AtividadeModel;
+import com.crianca.atividades.portal.gateway.data.CategoriaModel;
 import com.crianca.atividades.portal.usecase.ArquivoUseCase;
 import com.crianca.atividades.portal.usecase.AtividadeUseCase;
+import com.crianca.atividades.portal.usecase.CategoriaUseCase;
 import com.crianca.atividades.portal.usecase.data.AtividadePdfInput;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatusCode;
@@ -21,14 +22,14 @@ import java.util.List;
 @Tag(name = "Atividades")
 public class Controller {
 
-    private final AtividadesRepository repository;
     private final ArquivoUseCase arquivoUseCase;
     private final AtividadeUseCase atividadeUseCase;
+    private final CategoriaUseCase categoriaUseCase;
 
-    public Controller(AtividadesRepository repository, ArquivoUseCase arquivoUseCase, AtividadeUseCase atividadeUseCase){
-        this.repository = repository;
+    public Controller(ArquivoUseCase arquivoUseCase, AtividadeUseCase atividadeUseCase, CategoriaUseCase categoriaUseCase){
         this.arquivoUseCase = arquivoUseCase;
         this.atividadeUseCase = atividadeUseCase;
+        this.categoriaUseCase = categoriaUseCase;
     }
 
     @GetMapping
@@ -43,10 +44,8 @@ public class Controller {
     }
 
     @PostMapping
-    ResponseEntity saveAtividade(@RequestBody AtividadeRequest request){
-        atividadeUseCase.saveAtividade(request);
-        return new ResponseEntity(HttpStatusCode.valueOf(201));
-
+    ResponseEntity<AtividadeModel> saveAtividade(@RequestBody AtividadeRequest request){
+        return new ResponseEntity<AtividadeModel>(atividadeUseCase.saveAtividade(request), HttpStatusCode.valueOf(201));
     }
 
     @PostMapping("/pdf")
@@ -61,5 +60,16 @@ public class Controller {
         String arquivo = arquivoUseCase.getPdf(id);
         return ResponseEntity.ok(arquivo);
     }
+
+    @GetMapping("/categoria")
+    ResponseEntity<List<CategoriaModel>> getCategorias(){
+        return ResponseEntity.ok(categoriaUseCase.getCategorias());
+    }
+
+    @PostMapping("/categoria")
+    ResponseEntity<CategoriaModel> saveCategoria(@RequestBody CategoriaModel model){
+        return new ResponseEntity<CategoriaModel>(categoriaUseCase.saveCategoria(model), HttpStatusCode.valueOf(201));
+    }
+
 
 }
